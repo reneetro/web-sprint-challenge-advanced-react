@@ -10,12 +10,12 @@ export default class AppClass extends React.Component {
   }
   
   handleDirection = (dir) => {
-    //const {coordinates} = this.state;
+    const {coordinates} = this.state;
     if(dir === 'up'){
-      if(this.state.coordinates[1] > 1){
+      if(coordinates[1] > 1){
       this.setState({
         ...this.state,
-        coordinates: [this.state.coordinates[0], this.state.coordinates[1]-1]
+        coordinates: [coordinates[0], coordinates[1]-1]
       })
     }else {
       this.setState({
@@ -25,10 +25,10 @@ export default class AppClass extends React.Component {
     }
     }
     if(dir === 'down'){
-      if(this.state.coordinates[1] < 3){
+      if(coordinates[1] < 3){
       this.setState({
         ...this.state,
-        coordinates: [this.state.coordinates[0], this.state.coordinates[1]+1]
+        coordinates: [coordinates[0], coordinates[1]+1]
       })
     }else {
       this.setState({
@@ -38,10 +38,10 @@ export default class AppClass extends React.Component {
     }
     }
     if(dir === 'left'){
-      if(this.state.coordinates[0] > 1){
+      if(coordinates[0] > 1){
       this.setState({
         ...this.state,
-        coordinates: [this.state.coordinates[0]-1, this.state.coordinates[1]]
+        coordinates: [coordinates[0]-1, coordinates[1]]
       })
     }else {
       this.setState({
@@ -51,10 +51,10 @@ export default class AppClass extends React.Component {
     }
     }
     if(dir === 'right'){
-      if(this.state.coordinates[0] < 3){
+      if(coordinates[0] < 3){
       this.setState({
         ...this.state,
-        coordinates: [this.state.coordinates[0]+1, this.state.coordinates[1]]
+        coordinates: [coordinates[0]+1, coordinates[1]]
       })
     }else {
       this.setState({
