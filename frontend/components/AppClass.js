@@ -4,6 +4,7 @@ import axios from 'axios';
 const url = ' http://localhost:9000/api/result'
 
 export default class AppClass extends React.Component {
+  
   initialState = {
     coordinates: [2, 2],
     totalMoves: 0,
@@ -21,6 +22,7 @@ export default class AppClass extends React.Component {
     ],
     email: '',
   }
+
   state = this.initialState;
 
   handleChange = (evt) => {
@@ -49,10 +51,13 @@ export default class AppClass extends React.Component {
         })
       })
         .catch(err => {
-          
+          this.setState({
+            ...this.state,
+            message: err.response.data.message
+          })
         })
         return this.state
-    }
+  }
     
 
   handleDirection = (dir) => {
@@ -68,7 +73,7 @@ export default class AppClass extends React.Component {
       } else {
         this.setState({
           ...this.state,
-          message: `You can't go up!`,
+          message: `You can't go up`,
         });
       }
 
@@ -84,7 +89,7 @@ export default class AppClass extends React.Component {
       } else {
         this.setState({
           ...this.state,
-          message: `You can't go down!`,
+          message: `You can't go down`,
         });
       }
 
@@ -100,7 +105,7 @@ export default class AppClass extends React.Component {
       } else {
         this.setState({
           ...this.state,
-          message: `You can't go left!`,
+          message: `You can't go left`,
         });
       }
 
@@ -116,7 +121,7 @@ export default class AppClass extends React.Component {
       } else {
         this.setState({
           ...this.state,
-          message: `You can't go right!`,
+          message: `You can't go right`,
         });
       }
     }
@@ -289,17 +294,18 @@ export default class AppClass extends React.Component {
         [''],
         [''],
       ],
+      email: ''
     })
   }
 
-  getActiveSquare = (square, idx) => {
-    console.log(square, idx)
+  getActiveSquare = (square) => {
     if(square == 'B'){
       return 'square active'
     } else {
       return 'square'
     }
   }
+
   componentDidUpdate(prevProps, prevState) {
     if(prevState.coordinates !== this.state.coordinates){
       this.handleMove()
@@ -310,9 +316,7 @@ export default class AppClass extends React.Component {
         this.getActiveSquare(square, idx)
       })
   }
-}
-
-
+  }
 
   render() {
     const { className } = this.props;
@@ -321,12 +325,12 @@ export default class AppClass extends React.Component {
       <div id='wrapper' className={className}>
         <div className='info'>
           <h3 id='coordinates'>Coordinates {`(${this.state.coordinates})`}</h3>
-          <h3 id='steps'>You moved {this.state.totalMoves} times</h3>
+          <h3 id='steps'>You moved {this.state.totalMoves} {this.state.totalMoves === 1 ? `time` : `times`}</h3>
         </div>
         <div id='grid'>
           {this.state.grid.map((square, idx) => {
               return (  
-                <div className={this.getActiveSquare(square, idx)} key={idx}>
+                <div className={this.getActiveSquare(square)} key={idx}>
                   {square}
                 </div>
               )

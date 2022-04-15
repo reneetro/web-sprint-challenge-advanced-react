@@ -2,10 +2,22 @@ import React, { useState, useEffect } from 'react'
 
 
 export default function AppFunctional(props) {
-  
+  const initialGrid =  [
+    [''],
+    [''],
+    [''],
+    [''],
+    ['B'],
+    [''],
+    [''],
+    [''],
+    [''],
+  ]
+
   const [coordinates, setCoordinates] = useState([2,2]);
   const [message, setMessage] = useState('');
-
+  const [totalMoves, setTotalMoves] = useState(0);
+  const [grid, setGrid] = useState(initialGrid);
 
   const handleDirection = (dir) => {
     if(dir === 'up'){
