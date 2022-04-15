@@ -1,11 +1,13 @@
 import React from 'react';
+import axios from 'axios';
+
+const url = ' http://localhost:9000/api/result'
 
 export default class AppClass extends React.Component {
-  state = {
+  initialState = {
     coordinates: [2, 2],
     totalMoves: 0,
     message: '',
-    email: '',
     grid: [
       [''],
       [''],
@@ -17,7 +19,41 @@ export default class AppClass extends React.Component {
       [''],
       [''],
     ],
-  };
+    email: '',
+  }
+  state = this.initialState;
+
+  handleChange = (evt) => {
+    this.setState({
+      ...this.state,
+      email: evt.target.value
+    })
+  }
+
+  handleSubmit = (evt) => {
+    evt.preventDefault();
+
+    const submission = {
+       "x": this.state.coordinates[0], 
+       "y": this.state.coordinates[1], 
+       "steps": this.state.totalMoves, 
+       "email": this.state.email
+    }
+
+    axios.post(url, submission)
+      .then(res => {
+        this.setState({
+          ...this.state,
+          message: res.data.message,
+          email: '',
+        })
+      })
+        .catch(err => {
+          
+        })
+        return this.state
+    }
+    
 
   handleDirection = (dir) => {
     const { coordinates } = this.state;
@@ -26,7 +62,8 @@ export default class AppClass extends React.Component {
         this.setState({
           ...this.state,
           coordinates: [coordinates[0], coordinates[1] - 1],
-          totalMoves: this.state.totalMoves+1
+          totalMoves: this.state.totalMoves+1,
+          message: ''
         });
       } else {
         this.setState({
@@ -41,7 +78,8 @@ export default class AppClass extends React.Component {
         this.setState({
           ...this.state,
           coordinates: [coordinates[0], coordinates[1] + 1],
-          totalMoves: this.state.totalMoves+1
+          totalMoves: this.state.totalMoves+1,
+          message: ''
         });
       } else {
         this.setState({
@@ -56,7 +94,8 @@ export default class AppClass extends React.Component {
         this.setState({
           ...this.state,
           coordinates: [coordinates[0] - 1, coordinates[1]],
-          totalMoves: this.state.totalMoves+1
+          totalMoves: this.state.totalMoves+1,
+          message: ''
         });
       } else {
         this.setState({
@@ -71,7 +110,8 @@ export default class AppClass extends React.Component {
         this.setState({
           ...this.state,
           coordinates: [coordinates[0] + 1, coordinates[1]],
-          totalMoves: this.state.totalMoves+1
+          totalMoves: this.state.totalMoves+1,
+          message: ''
         });
       } else {
         this.setState({
@@ -233,11 +273,46 @@ export default class AppClass extends React.Component {
     return this.state.grid
   }
 
+  handleReset = () => {
+    this.setState({
+      coordinates: [2, 2],
+      totalMoves: 0,
+      message: '',
+      grid: [
+        [''],
+        [''],
+        [''],
+        [''],
+        ['B'],
+        [''],
+        [''],
+        [''],
+        [''],
+      ],
+    })
+  }
+
+  getActiveSquare = (square, idx) => {
+    console.log(square, idx)
+    if(square == 'B'){
+      return 'square active'
+    } else {
+      return 'square'
+    }
+  }
   componentDidUpdate(prevProps, prevState) {
     if(prevState.coordinates !== this.state.coordinates){
       this.handleMove()
     }
+
+    if(prevState.grid !== this.state.grid){
+      this.state.grid.map((square, idx) => {
+        this.getActiveSquare(square, idx)
+      })
   }
+}
+
+
 
   render() {
     const { className } = this.props;
@@ -250,14 +325,13 @@ export default class AppClass extends React.Component {
         </div>
         <div id='grid'>
           {this.state.grid.map((square, idx) => {
-            return (
-              
-              <div className='square' key={idx}>
-                {square}
-              </div>
-              
-            );
-          })}
+              return (  
+                <div className={this.getActiveSquare(square, idx)} key={idx}>
+                  {square}
+                </div>
+              )
+            }
+          )}
         </div>
         <div className='info'>
           <h3 id='message'>{this.state.message}</h3>
@@ -275,11 +349,11 @@ export default class AppClass extends React.Component {
           <button id='down' onClick={() => this.handleDirection('down')}>
             DOWN
           </button>
-          <button id='reset'>reset</button>
+          <button id='reset' onClick = {() => this.handleReset()}>reset</button>
         </div>
-        <form>
-          <input id='email' type='email' placeholder='type email'></input>
-          <input id='submit' type='submit'></input>
+        <form onSubmit={this.handleSubmit}>
+          <input id='email' type='email' placeholder='type email' onChange={this.handleChange} value={this.state.email}></input>
+          <input id='submit' type='submit' ></input>
         </form>
       </div>
     );
