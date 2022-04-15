@@ -26,11 +26,13 @@ export default function AppFunctional(props) {
         coordinates[0], 
         coordinates[1]-1
       ])
+      setTotalMoves(totalMoves+1)
+      setMessage('')
     }else{
       setCoordinates([
         ...coordinates
       ])
-      setMessage(`You can't go up!`)
+      setMessage(`You can't go up`)
     }
   }
     if(dir === 'down'){
@@ -39,11 +41,13 @@ export default function AppFunctional(props) {
         coordinates[0], 
         coordinates[1]+1
       ])
+      setTotalMoves(totalMoves+1)
+      setMessage('')
     }else{
       setCoordinates([
         ...coordinates
       ])
-      setMessage(`You can't go down!`)
+      setMessage(`You can't go down`)
     }
   }
     if(dir === 'left'){
@@ -53,11 +57,13 @@ export default function AppFunctional(props) {
         coordinates[0]-1, 
         coordinates[1]
       ])
+      setTotalMoves(totalMoves+1)
+      setMessage('')
     }else{
       setCoordinates([
         ...coordinates
       ])
-      setMessage(`You can't go left!`)
+      setMessage(`You can't go left`)
 
     }
   }
@@ -67,41 +73,189 @@ export default function AppFunctional(props) {
       coordinates[0]+1, 
       coordinates[1]
     ])
+    setTotalMoves(totalMoves+1)
+    setMessage('')
   }else{
     setCoordinates([
       ...coordinates
     ])
-    setMessage(`You can't go right!`)
+    setMessage(`You can't go right`)
   }
 }
     return coordinates;
 }
 
-
 const handleReset = () => {
   setCoordinates([2,2]);
   setMessage('');
+  setTotalMoves(0);
 }
 
+const handleMove = () => {
+    if(coordinates[0] === 1 && coordinates[1] === 1){
+      setGrid(
+        [
+          ['B'],
+          [''],
+          [''],
+          [''],
+          [''],
+          [''],
+          [''],
+          [''],
+          [''],
+        ]
+      )
+    }
+    if(coordinates[0] === 2 && coordinates[1] === 1){
+      setGrid(
+        [
+          [''],
+          ['B'],
+          [''],
+          [''],
+          [''],
+          [''],
+          [''],
+          [''],
+          [''],
+        ]
+      )
+    }
+    if(coordinates[0] === 3 && coordinates[1] === 1){
+      setGrid(
+        [
+          [''],
+          [''],
+          ['B'],
+          [''],
+          [''],
+          [''],
+          [''],
+          [''],
+          [''],
+        ]
+      )
+    }
+    if(coordinates[0] === 1 && coordinates[1] === 2){
+      setGrid(
+        [
+          [''],
+          [''],
+          [''],
+          ['B'],
+          [''],
+          [''],
+          [''],
+          [''],
+          [''],
+        ]
+      )
+    }
+    if(coordinates[0] === 2 && coordinates[1] === 2){
+      setGrid(
+        [
+          [''],
+          [''],
+          [''],
+          [''],
+          ['B'],
+          [''],
+          [''],
+          [''],
+          [''],
+        ]
+      )
+    }
+    if(coordinates[0] === 3 && coordinates[1] === 2){
+      setGrid(
+        [
+          [''],
+          [''],
+          [''],
+          [''],
+          [''],
+          ['B'],
+          [''],
+          [''],
+          [''],
+        ]
+      )
+    }
+    if(coordinates[0] === 1 && coordinates[1] === 3){
+      setGrid(
+        [
+          [''],
+          [''],
+          [''],
+          [''],
+          [''],
+          [''],
+          ['B'],
+          [''],
+          [''],
+        ]
+      )
+    }
+    if(coordinates[0] === 2 && coordinates[1] === 3){
+      setGrid(
+        [
+          [''],
+          [''],
+          [''],
+          [''],
+          [''],
+          [''],
+          [''],
+          ['B'],
+          [''],
+        ]
+      )
+    }
+    if(coordinates[0] === 3 && coordinates[1] === 3){
+      setGrid(
+        [
+          [''],
+          [''],
+          [''],
+          [''],
+          [''],
+          [''],
+          [''],
+          [''],
+          ['B'],
+        ]
+      )
+    }
+    return grid;
+}
+const getActiveSquare = (square) => {
+  if(square == 'B'){
+    return 'square active'
+  } else {
+    return 'square'
+  }
+}
 
-
+useEffect(() => {
+  handleMove()
+},[coordinates])
 
   return (
     <div id="wrapper" className={props.className}>
       <div className="info">
         <h3 id="coordinates">Coordinates {`(${coordinates})`}</h3>
-        <h3 id="steps">You moved 0 times</h3>
+        <h3 id="steps">You moved {totalMoves} {totalMoves === 1 ? `time` : `times`}</h3>
       </div>
       <div id="grid">
-        <div className='square'></div>
-        <div className="square"></div>
-        <div className="square"></div>
-        <div className="square"></div>
-        <div className='square active'>B</div>
-        <div className="square"></div>
-        <div className="square"></div>
-        <div className="square"></div>
-        <div className="square"></div>
+      {grid.map((square, idx) => {
+              return (  
+                <div className={getActiveSquare(square)} key={idx}>
+                  {square}
+                </div>
+              )
+            }
+          )}
       </div>
       <div className="info">
         <h3 id="message">{message}</h3>
