@@ -5,7 +5,7 @@ export default function AppFunctional(props) {
   
   const [coordinates, setCoordinates] = useState([2,2]);
   const [message, setMessage] = useState('');
-  const email = document.getElementById('email');
+
 
   const handleDirection = (dir) => {
     if(dir === 'up'){
